@@ -1,0 +1,24 @@
+name: PR Release
+
+on:
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Create Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="release-$(date +%Y%m%d%H%M%S)"
+          gh release create "$TAG" \
+            --title "this is a PR release" \
+            --notes "Automated release from push to main (commit: ${{ github.sha }})"
+ 
